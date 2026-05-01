@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { useNavigate, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
@@ -6,6 +7,14 @@ import {
   Home, LayoutDashboard, CreditCard, Activity, TrendingUp, FileText, Settings
 } from 'lucide-react'
 import { ContainerScroll } from './components/ui/container-scroll-animation'
+import AppLayout from './components/dashboard/AppLayout'
+import DashboardPage from './pages/DashboardPage'
+import AccountsPage from './pages/AccountsPage'
+import CashFlowPage from './pages/CashFlowPage'
+import InvestmentsPage from './pages/InvestmentsPage'
+import ReportsPage from './pages/ReportsPage'
+import SettingsPage from './pages/SettingsPage'
+import NotificationsPage from './pages/NotificationsPage'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -84,24 +93,20 @@ function MobileHamburger({ onClick }) {
 }
 
 // ─── MOBILE MENU ──────────────────────────────────────────────────────────────
-function MobileMenu({ isOpen, onClose, onNavigate }) {
+function MobileMenu({ isOpen, onClose }) {
   const [search, setSearch] = useState('')
 
   const sidebarItems = [
-    { icon: Home,            label: 'Home' },
-    { icon: LayoutDashboard, label: 'Dashboard' },
-    { icon: CreditCard,      label: 'Accounts' },
-    { icon: Activity,        label: 'Cash flow' },
-    { icon: TrendingUp,      label: 'Investments' },
-    { icon: FileText,        label: 'Reports' },
-    { icon: Settings,        label: 'Settings' },
+    { icon: Home,            label: 'Home',        path: '/' },
+    { icon: LayoutDashboard, label: 'Dashboard',   path: '/app/dashboard' },
+    { icon: CreditCard,      label: 'Accounts',    path: '/app/accounts' },
+    { icon: Activity,        label: 'Cash flow',   path: '/app/cash-flow' },
+    { icon: TrendingUp,      label: 'Investments', path: '/app/investments' },
+    { icon: FileText,        label: 'Reports',     path: '/app/reports' },
+    { icon: Settings,        label: 'Settings',    path: '/app/settings' },
   ]
 
-  const pageLinks = [
-    { label: 'Platform',     id: 'features' },
-    { label: 'How it works', id: 'protocol' },
-    { label: 'Pricing',      id: 'pricing' },
-  ]
+  const navigate = useNavigate()
 
   return (
     <>
@@ -132,7 +137,7 @@ function MobileMenu({ isOpen, onClose, onNavigate }) {
               placeholder="Search..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full h-10 bg-[#F3F3F3] border border-[#1F1F1F]/10 rounded-[8px] pl-9 pr-4 text-sm outline-none font-outfit placeholder:text-[#1F1F1F]/40 hover:border-[#CEFB4D]/60 focus:border-[#CEFB4D] transition-colors"
+              className="w-full h-10 bg-white border border-[#1F1F1F]/10 rounded-[8px] pl-9 pr-4 text-sm outline-none font-outfit placeholder:text-[#1F1F1F]/40 hover:border-[#CEFB4D]/60 focus:border-[#CEFB4D] transition-colors shadow-[0_2px_8px_rgba(16,24,40,0.06)]"
             />
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#1F1F1F]/30 pointer-events-none" />
           </div>
@@ -143,39 +148,24 @@ function MobileMenu({ isOpen, onClose, onNavigate }) {
           {/* Sidebar app items */}
           <div className="mb-3">
             <p className="font-mono text-[#1F1F1F]/25 text-[10px] px-2 mb-2 uppercase tracking-widest">App</p>
-            {sidebarItems.map(({ icon: Icon, label }) => (
-              <a
+            {sidebarItems.map(({ icon: Icon, label, path }) => (
+              <button
                 key={label}
-                href="#"
-                onClick={onClose}
-                className="group flex items-center h-10 px-2 rounded-[10px] text-[#1F1F1F]/55 hover:text-[#1F1F1F] hover:bg-[#CEFB4D]/20 transition-all gap-3"
+                onClick={() => { onClose(); navigate(path) }}
+                className="group w-full flex items-center h-10 px-2 rounded-[10px] text-[#1F1F1F]/55 hover:text-[#1F1F1F] hover:bg-[#CEFB4D]/20 transition-all gap-3 outline-none text-left"
               >
                 <span className="w-7 h-7 flex items-center justify-center rounded-full flex-shrink-0 transition-colors duration-200 group-hover:bg-[#CEFB4D]">
                   <Icon size={16} />
                 </span>
                 <span className="font-outfit text-sm font-medium">{label}</span>
-              </a>
-            ))}
-          </div>
-
-          {/* Page nav links */}
-          <div className="border-t border-[#1F1F1F]/[0.08] pt-3 mb-3">
-            <p className="font-mono text-[#1F1F1F]/25 text-[10px] px-2 mb-2 uppercase tracking-widest">Pages</p>
-            {pageLinks.map(({ label, id }) => (
-              <button
-                key={label}
-                onClick={() => { onClose(); setTimeout(() => scrollTo(id), 320) }}
-                className="w-full flex items-center h-10 px-2 rounded-[10px] font-outfit font-medium text-[#1F1F1F]/55 hover:text-[#1F1F1F] hover:bg-[#CEFB4D]/20 transition-all text-sm text-left outline-none"
-              >
-                {label}
               </button>
             ))}
           </div>
 
           {/* CTA */}
-          <div className="border-t border-[#1F1F1F]/[0.08] pt-3">
+          <div className="border-t border-[#1F1F1F]/[0.08] pt-3 mt-1">
             <button
-              onClick={() => { onClose(); onNavigate('register') }}
+              onClick={() => { onClose(); navigate('/register') }}
               className="btn-magnetic group w-full h-11 rounded-[8px] bg-[#CEFB4D] font-semibold text-sm text-[#1F1F1F] flex items-center justify-center outline-none border-0"
             >
               <span className="btn-slide bg-[#1F1F1F]" />
@@ -206,15 +196,16 @@ function MobileMenu({ isOpen, onClose, onNavigate }) {
 // ─── SIDEBAR ──────────────────────────────────────────────────────────────────
 function Sidebar() {
   const [expanded, setExpanded] = useState(false)
+  const location = useLocation()
 
   const navItems = [
-    { icon: Home,            label: 'Home' },
-    { icon: LayoutDashboard, label: 'Dashboard' },
-    { icon: CreditCard,      label: 'Accounts' },
-    { icon: Activity,        label: 'Cash flow' },
-    { icon: TrendingUp,      label: 'Investments' },
-    { icon: FileText,        label: 'Reports' },
-    { icon: Settings,        label: 'Settings' },
+    { icon: Home,            label: 'Home',        path: '/' },
+    { icon: LayoutDashboard, label: 'Dashboard',   path: '/app/dashboard' },
+    { icon: CreditCard,      label: 'Accounts',    path: '/app/accounts' },
+    { icon: Activity,        label: 'Cash flow',   path: '/app/cash-flow' },
+    { icon: TrendingUp,      label: 'Investments', path: '/app/investments' },
+    { icon: FileText,        label: 'Reports',     path: '/app/reports' },
+    { icon: Settings,        label: 'Settings',    path: '/app/settings' },
   ]
 
   const textStyle = {
@@ -253,19 +244,22 @@ function Sidebar() {
       </div>
 
       <nav className="flex-1 py-4 flex flex-col gap-0.5 justify-center overflow-hidden">
-        {navItems.map(({ icon: Icon, label }) => (
-          <a
-            key={label}
-            href="#"
-            className="group flex items-center h-10 rounded-[10px] text-[#1F1F1F]/55 hover:text-[#1F1F1F] transition-colors cursor-pointer"
-            style={{ paddingLeft: 16, paddingRight: 8 }}
-          >
-            <span className="w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 transition-colors duration-200 group-hover:bg-[#CEFB4D]">
-              <Icon size={19} />
-            </span>
-            <span className="text-sm font-medium" style={textStyle}>{label}</span>
-          </a>
-        ))}
+        {navItems.map(({ icon: Icon, label, path }) => {
+          const isActive = path === '/' ? location.pathname === '/' : location.pathname.startsWith(path)
+          return (
+            <Link
+              key={label}
+              to={path}
+              className={`group flex items-center h-10 rounded-[10px] transition-colors cursor-pointer ${isActive ? 'text-[#1F1F1F]' : 'text-[#1F1F1F]/55 hover:text-[#1F1F1F]'}`}
+              style={{ paddingLeft: 16, paddingRight: 8 }}
+            >
+              <span className={`w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 transition-colors duration-200 ${isActive ? 'bg-[#CEFB4D]' : 'group-hover:bg-[#CEFB4D]'}`}>
+                <Icon size={19} />
+              </span>
+              <span className="text-sm font-medium" style={textStyle}>{label}</span>
+            </Link>
+          )
+        })}
       </nav>
 
       <div className="pb-3 pt-2 border-t border-[#1F1F1F]/[0.08] flex-shrink-0">
@@ -375,8 +369,9 @@ function StatPanel({ val, label }) {
 }
 
 // ─── HERO ─────────────────────────────────────────────────────────────────────
-function Hero({ onNavigate }) {
+function Hero() {
   const heroRef = useRef(null)
+  const navigate = useNavigate()
   const [searchFocused, setSearchFocused] = useState(false)
 
   useEffect(() => {
@@ -430,7 +425,7 @@ function Hero({ onNavigate }) {
           <Search size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#1F1F1F]/30 pointer-events-none" />
         </div>
         <button
-          onClick={() => scrollTo('pricing')}
+          onClick={() => navigate('/register')}
           className="btn-magnetic group h-12 pl-6 pr-[34px] rounded-[8px] bg-[#CEFB4D] text-[#1F1F1F] font-semibold text-sm flex items-center gap-2"
         >
           <span className="btn-slide bg-[#1F1F1F]" />
@@ -466,7 +461,7 @@ function Hero({ onNavigate }) {
           {/* Dark → Accent on hover */}
           <button
             onClick={() => scrollTo('pricing')}
-            className="btn-magnetic group bg-[#1F1F1F] text-white font-semibold pl-8 pr-[36px] h-12 rounded-[8px] flex items-center gap-2 shadow-[0_24px_48px_-12px_rgba(16,24,40,0.12)]"
+            className="btn-magnetic group bg-[#1F1F1F] text-white font-semibold h-12 rounded-[8px] flex items-center justify-center gap-2 shadow-[0_24px_48px_-12px_rgba(16,24,40,0.12)] w-full sm:w-[220px]"
           >
             <span className="btn-slide bg-[#CEFB4D]" />
             <span className="relative z-10 flex items-center gap-2 transition-colors duration-300 group-hover:text-[#1F1F1F]">
@@ -476,7 +471,7 @@ function Hero({ onNavigate }) {
           {/* White → Accent on hover */}
           <button
             onClick={() => scrollTo('protocol')}
-            className="btn-magnetic group bg-white text-[#1F1F1F] font-semibold px-8 h-12 rounded-[8px] flex items-center gap-2 shadow-[0_24px_48px_-12px_rgba(16,24,40,0.12)]"
+            className="btn-magnetic group bg-white text-[#1F1F1F] font-semibold h-12 rounded-[8px] flex items-center justify-center gap-2 shadow-[0_24px_48px_-12px_rgba(16,24,40,0.12)] w-full sm:w-[220px]"
           >
             <span className="btn-slide bg-[#CEFB4D]" />
             <span className="relative z-10 transition-colors duration-300">See how it works</span>
@@ -757,7 +752,7 @@ function Features() {
 // ─── PHILOSOPHY SCROLL ────────────────────────────────────────────────────────
 function PhilosophyScroll() {
   return (
-    <section className="bg-[#F3F3F3] pb-0 lg:pb-8">
+    <section className="bg-[#F3F3F3] pt-28 md:pt-4 lg:pt-0 pb-0 md:pb-4 lg:pb-8">
       <ContainerScroll
         titleComponent={
           <div className="pb-4 lg:pb-8">
@@ -777,7 +772,7 @@ function PhilosophyScroll() {
         }
       >
         <img
-          src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=80"
+          src="/dashboard-preview.png"
           alt="Fluxio platform"
           className="w-full h-full object-cover object-top"
           draggable={false}
@@ -912,7 +907,8 @@ function Protocol() {
 }
 
 // ─── PRICING ──────────────────────────────────────────────────────────────────
-function Pricing({ onNavigate }) {
+function Pricing() {
+  const navigate = useNavigate()
   const tiers = [
     {
       name: 'Essential', price: '$299',
@@ -979,7 +975,7 @@ function Pricing({ onNavigate }) {
                   </ul>
                 </div>
                 <button
-                  onClick={() => t.action ? onNavigate(t.action) : undefined}
+                  onClick={() => t.action ? navigate(`/${t.action}`) : undefined}
                   className="btn-magnetic group mt-8 w-full h-12 rounded-[8px] font-semibold text-sm flex items-center justify-center bg-[#1F1F1F] text-white"
                 >
                   <span className={`btn-slide ${t.highlight ? 'bg-white' : 'bg-[#CEFB4D]'}`} />
@@ -995,14 +991,15 @@ function Pricing({ onNavigate }) {
 }
 
 // ─── LOGIN PAGE ───────────────────────────────────────────────────────────────
-function LoginPage({ onNavigate }) {
+function LoginPage() {
+  const navigate = useNavigate()
   const [form, setForm] = useState({ email: '', password: '' })
 
   return (
     <div className="min-h-screen bg-[#F3F3F3] flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <button onClick={() => onNavigate('landing')} className="inline-block mb-8 cursor-pointer">
+          <button onClick={() => navigate('/')} className="inline-block mb-8 cursor-pointer">
             <Logo />
           </button>
           <h1 className="font-outfit font-semibold text-[#1F1F1F] text-3xl tracking-tighter mb-2">Welcome back</h1>
@@ -1041,7 +1038,7 @@ function LoginPage({ onNavigate }) {
           <p className="font-outfit text-sm text-[#1F1F1F]/40 text-center mt-6">
             Don't have an account?{' '}
             <button
-              onClick={() => onNavigate('register')}
+              onClick={() => navigate('/register')}
               className="text-[#1F1F1F] font-semibold hover:text-[#1F1F1F]/60 transition-colors underline underline-offset-2"
             >
               Create one
@@ -1055,14 +1052,15 @@ function LoginPage({ onNavigate }) {
 }
 
 // ─── REGISTER PAGE ────────────────────────────────────────────────────────────
-function RegisterPage({ onNavigate }) {
+function RegisterPage() {
+  const navigate = useNavigate()
   const [form, setForm] = useState({ name: '', email: '', password: '' })
 
   return (
     <div className="min-h-screen bg-[#F3F3F3] flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <button onClick={() => onNavigate('landing')} className="inline-block mb-8 cursor-pointer">
+          <button onClick={() => navigate('/')} className="inline-block mb-8 cursor-pointer">
             <Logo />
           </button>
           <h1 className="font-outfit font-semibold text-[#1F1F1F] text-3xl tracking-tighter mb-2">Start your free trial</h1>
@@ -1110,7 +1108,7 @@ function RegisterPage({ onNavigate }) {
           <p className="font-outfit text-sm text-[#1F1F1F]/40 text-center mt-6">
             Already have an account?{' '}
             <button
-              onClick={() => onNavigate('login')}
+              onClick={() => navigate('/login')}
               className="text-[#1F1F1F] font-semibold hover:text-[#1F1F1F]/60 transition-colors underline underline-offset-2"
             >
               Sign in
@@ -1198,10 +1196,11 @@ function Footer() {
             <p className="font-mono text-white/25 text-xs mb-6 lg:mb-7">// Drop me a line</p>
             <a
               href="mailto:hello@fluxio.io"
-              className="font-outfit font-semibold text-white hover:text-[#CEFB4D] transition-colors mb-auto"
+              className="group relative font-outfit font-semibold text-white hover:text-[#CEFB4D] transition-colors mb-auto inline-block self-start"
               style={{ fontSize: 'clamp(20px, 2.5vw, 34px)', lineHeight: 1.2 }}
             >
               hello@fluxio.io
+              <span className="absolute bottom-0 left-0 h-[3px] w-0 bg-[#CEFB4D] group-hover:w-full transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]" />
             </a>
             <div className="flex gap-3 mt-8">
               {[
@@ -1226,43 +1225,46 @@ function Footer() {
   )
 }
 
-// ─── APP ──────────────────────────────────────────────────────────────────────
-export default function App() {
-  const [page,           setPage]           = useState('landing')
+// ─── LANDING LAYOUT ───────────────────────────────────────────────────────────
+function LandingLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-
-  if (page === 'login')    return <LoginPage    onNavigate={setPage} />
-  if (page === 'register') return <RegisterPage onNavigate={setPage} />
 
   return (
     <>
-      {/* Desktop sidebar — lg+ only */}
-      <div className="hidden lg:block">
-        <Sidebar />
-      </div>
-
-      {/* Standalone sticky hamburger button — mobile only, no full header bar */}
+      <div className="hidden lg:block"><Sidebar /></div>
       <MobileHamburger onClick={() => setMobileMenuOpen(true)} />
-
-      {/* Mobile slide-in menu */}
-      <MobileMenu
-        isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        onNavigate={setPage}
-      />
-
-      {/* Global sticky scroll-to-top */}
+      <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
       <ScrollToTop />
-
-      {/* Main content */}
       <div className="lg:pl-16">
-        <Hero onNavigate={setPage} />
+        <Hero />
         <Features />
         <PhilosophyScroll />
         <Protocol />
-        <Pricing onNavigate={setPage} />
+        <Pricing />
         <Footer />
       </div>
     </>
+  )
+}
+
+// ─── APP ──────────────────────────────────────────────────────────────────────
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/"          element={<LandingLayout />} />
+      <Route path="/login"     element={<LoginPage />} />
+      <Route path="/register"  element={<RegisterPage />} />
+      <Route path="/app"       element={<AppLayout />}>
+        <Route index           element={<Navigate to="/app/dashboard" replace />} />
+        <Route path="dashboard"   element={<DashboardPage />} />
+        <Route path="accounts"    element={<AccountsPage />} />
+        <Route path="cash-flow"   element={<CashFlowPage />} />
+        <Route path="investments" element={<InvestmentsPage />} />
+        <Route path="reports"     element={<ReportsPage />} />
+        <Route path="settings"       element={<SettingsPage />} />
+        <Route path="notifications"  element={<NotificationsPage />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }

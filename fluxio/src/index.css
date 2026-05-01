@@ -124,6 +124,11 @@ body::before {
 }
 .pulse-ring { animation: pulse-ring 2.2s ease-in-out infinite; }
 
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#F3F3F3}
 ::-webkit-scrollbar-thumb{background:#1F1F1F;border-radius:2px}
