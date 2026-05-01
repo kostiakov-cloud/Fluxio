@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Outlet, NavLink, useNavigate } from 'react-router-dom'
+import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom'
 import {
   LayoutDashboard, CreditCard, Activity, TrendingUp, FileText, Settings,
   Search, Bell, ChevronDown, Menu, X, Home,
@@ -141,11 +141,6 @@ export default function AppLayout() {
         </div>
       </aside>
 
-      {/* ── Backdrop to close dropdowns ───────────────────── */}
-      {(notifOpen || userOpen) && (
-        <div className="fixed inset-0 z-40" onClick={closeAll} />
-      )}
-
       {/* ── Main ──────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 lg:ml-60">
 
@@ -173,24 +168,25 @@ export default function AppLayout() {
           <div className="flex items-center gap-2 ml-auto">
 
             {/* Bell + notification dropdown */}
-            <div className="relative">
-              <button
-                onClick={() => { setNotifOpen(v => !v); setUserOpen(false) }}
-                className="relative w-9 h-9 flex items-center justify-center rounded-[8px] text-[#1F1F1F]/50 hover:bg-[#1F1F1F]/[0.05] outline-none transition-colors"
-              >
+            <div className="relative"
+              onMouseEnter={() => { setNotifOpen(true); setUserOpen(false) }}
+              onMouseLeave={() => setNotifOpen(false)}
+            >
+              <button className="relative w-9 h-9 flex items-center justify-center rounded-[8px] text-[#1F1F1F]/50 hover:bg-[#1F1F1F]/[0.05] outline-none transition-colors">
                 <Bell size={16} />
                 <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-[#CEFB4D] rounded-full" />
               </button>
 
               {notifOpen && (
-                <div className="absolute top-full right-0 mt-2 w-80 bg-white rounded-[16px] border border-[#1F1F1F]/[0.08] shadow-[0_16px_40px_rgba(16,24,40,0.14)] z-50 overflow-hidden">
+                <div className="absolute top-full right-0 pt-2 w-80 z-50">
+                <div className="bg-white rounded-[16px] border border-[#1F1F1F]/[0.08] shadow-[0_16px_40px_rgba(16,24,40,0.14)] overflow-hidden">
                   <div className="flex items-center justify-between px-4 py-3 border-b border-[#1F1F1F]/[0.07]">
                     <p className="font-outfit font-semibold text-sm text-[#1F1F1F]">Notifications</p>
                     <span className="font-outfit text-[10px] font-semibold text-[#1F1F1F] bg-[#CEFB4D] px-2 py-0.5 rounded-full">2 unread</span>
                   </div>
                   <div className="divide-y divide-[#1F1F1F]/[0.05]">
                     {NOTIFICATIONS.map(({ id, Icon: NIcon, color, title, body, time, unread }) => (
-                      <div key={id} className={`flex gap-3 px-4 py-3 hover:bg-[#F3F3F3]/60 transition-colors cursor-pointer ${unread ? 'bg-[#CEFB4D]/[0.04]' : ''}`}>
+                      <Link key={id} to="/app/notifications" onClick={closeAll} className={`flex gap-3 px-4 py-3 hover:bg-[#F3F3F3]/60 transition-colors ${unread ? 'bg-[#CEFB4D]/[0.04]' : ''}`}>
                         <span className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: `${color}18`, color }}>
                           <NIcon size={13} />
                         </span>
@@ -202,41 +198,44 @@ export default function AppLayout() {
                           <span className="font-outfit text-[10px] text-[#1F1F1F]/30 whitespace-nowrap">{time}</span>
                           {unread && <span className="w-1.5 h-1.5 rounded-full bg-[#CEFB4D]" />}
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                   <div className="p-3 border-t border-[#1F1F1F]/[0.07]">
-                    <button
-                      onClick={() => { closeAll(); navigate('/app/notifications') }}
-                      className="w-full h-9 rounded-[8px] bg-[#F3F3F3] font-outfit text-xs font-semibold text-[#1F1F1F]/60 hover:bg-[#1F1F1F] hover:text-white transition-all"
+                    <Link
+                      to="/app/notifications"
+                      onClick={closeAll}
+                      className="w-full h-9 rounded-[8px] bg-[#F3F3F3] font-outfit text-xs font-semibold text-[#1F1F1F]/60 hover:bg-[#1F1F1F] hover:text-white transition-all flex items-center justify-center"
                     >
                       View All Notifications
-                    </button>
+                    </Link>
                   </div>
+                </div>
                 </div>
               )}
             </div>
 
             {/* User avatar + dropdown */}
-            <div className="relative">
-              <div
-                onClick={() => { setUserOpen(v => !v); setNotifOpen(false) }}
-                className="flex items-center gap-2 cursor-pointer hover:bg-[#1F1F1F]/[0.04] rounded-[8px] px-2 py-1.5 transition-colors"
-              >
+            <div className="relative"
+              onMouseEnter={() => { setUserOpen(true); setNotifOpen(false) }}
+              onMouseLeave={() => setUserOpen(false)}
+            >
+              <div className="flex items-center gap-2 cursor-default hover:bg-[#1F1F1F]/[0.04] rounded-[8px] px-2 py-1.5 transition-colors">
                 <UserAvatar />
                 <span className="hidden sm:block font-outfit text-sm font-medium text-[#1F1F1F]">Oleh K.</span>
                 <ChevronDown size={13} className={`text-[#1F1F1F]/30 transition-transform duration-200 ${userOpen ? 'rotate-180' : ''}`} />
               </div>
 
               {userOpen && (
-                <div className="absolute top-full right-0 mt-2 w-52 bg-white rounded-[16px] border border-[#1F1F1F]/[0.08] shadow-[0_16px_40px_rgba(16,24,40,0.14)] z-50 p-1.5">
+                <div className="absolute top-full right-0 pt-2 w-52 z-50">
+                <div className="bg-white rounded-[16px] border border-[#1F1F1F]/[0.08] shadow-[0_16px_40px_rgba(16,24,40,0.14)] p-1.5">
                   <div className="px-3 py-2.5 mb-1">
                     <p className="font-outfit font-semibold text-xs text-[#1F1F1F]">Oleh Kostiakov</p>
                     <p className="font-outfit text-[10px] text-[#1F1F1F]/40 mt-0.5">CFO · Ledgerly</p>
                   </div>
                   <div className="border-t border-[#1F1F1F]/[0.07] pt-1">
                     {[
-                      { Icon: UserIcon, label: 'Profile',  action: () => { closeAll(); navigate('/app/settings') } },
+                      { Icon: UserIcon, label: 'Profile',  action: () => { closeAll(); navigate('/app/settings?tab=profile') } },
                       { Icon: Settings, label: 'Settings', action: () => { closeAll(); navigate('/app/settings') } },
                     ].map(({ Icon: ItemIcon, label, action }) => (
                       <button key={label} onClick={action}
@@ -255,6 +254,7 @@ export default function AppLayout() {
                       Sign out
                     </button>
                   </div>
+                </div>
                 </div>
               )}
             </div>

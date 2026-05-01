@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import {
   User, Building2, Bell, Puzzle, Key, CreditCard, Shield,
   Camera, Trash2, Save, X, Copy, Check, Plus, Eye, EyeOff,
@@ -667,7 +668,17 @@ function SecurityTab() {
 
 // ── Main page ─────────────────────────────────────────────────────────────────
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState('profile')
+  const [searchParams] = useSearchParams()
+  const VALID_TABS = NAV_ITEMS.map(n => n.id)
+  const [activeTab, setActiveTab] = useState(() => {
+    const tab = searchParams.get('tab')
+    return VALID_TABS.includes(tab) ? tab : 'profile'
+  })
+
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (VALID_TABS.includes(tab)) setActiveTab(tab)
+  }, [searchParams])
 
   const TABS = {
     profile:       <ProfileTab />,
