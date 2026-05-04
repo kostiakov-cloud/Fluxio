@@ -222,7 +222,7 @@ export default function CashFlowPage() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto no-scrollbar">
           <table className="w-full">
             <thead>
               <tr className="border-b border-[#1F1F1F]/[0.07]">

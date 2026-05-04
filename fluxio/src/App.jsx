@@ -457,7 +457,7 @@ function Hero() {
           Fluxio streamlines cross-border liquidity with automated precision — so your capital moves as fast as your ambition.
         </p>
 
-        <div className="hero-item opacity-0 flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center">
+        <div className="hero-item opacity-0 flex flex-col sm:flex-row gap-3 lg:gap-4 items-center justify-center w-full sm:w-auto">
           {/* Dark → Accent on hover */}
           <button
             onClick={() => scrollTo('pricing')}
@@ -752,7 +752,7 @@ function Features() {
 // ─── PHILOSOPHY SCROLL ────────────────────────────────────────────────────────
 function PhilosophyScroll() {
   return (
-    <section className="bg-[#F3F3F3] pt-28 md:pt-4 lg:pt-0 pb-0 md:pb-4 lg:pb-8">
+    <section className="bg-[#F3F3F3] pt-[120px] md:pt-8 lg:pt-4 pb-0 md:pb-4 lg:pb-8">
       <ContainerScroll
         titleComponent={
           <div className="pb-4 lg:pb-8">

@@ -63,13 +63,19 @@ export default function ReportsPage() {
           <p className="font-outfit text-sm text-[#1F1F1F]/40 mt-0.5">Generate, preview, and export financial reports.</p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="h-9 px-3 rounded-[8px] border border-[#1F1F1F]/10 font-outfit text-xs text-[#1F1F1F]/50 hover:border-[#1F1F1F]/20 hover:text-[#1F1F1F] transition-colors flex items-center gap-1.5 outline-none">
-            <Archive size={13} />Browse Archive
+          <button
+            title="Browse Archive"
+            className="h-9 w-9 flex items-center justify-center rounded-[8px] border border-[#1F1F1F]/10 text-[#1F1F1F]/50 hover:border-[#1F1F1F]/20 hover:text-[#1F1F1F] transition-colors outline-none"
+          >
+            <Archive size={15} />
           </button>
-          <button className="btn-magnetic group h-9 px-4 rounded-[8px] bg-[#1F1F1F] text-white font-semibold text-xs flex items-center gap-1.5 outline-none border-0">
+          <button
+            title="New Report"
+            className="btn-magnetic group h-9 w-9 rounded-[8px] bg-[#1F1F1F] text-white flex items-center justify-center outline-none border-0"
+          >
             <span className="btn-slide bg-[#CEFB4D]" />
-            <span className="relative z-10 flex items-center gap-1.5 transition-colors duration-300 group-hover:text-[#1F1F1F]">
-              <Plus size={13} />New Report
+            <span className="relative z-10 flex items-center justify-center transition-colors duration-300 group-hover:text-[#1F1F1F]">
+              <Plus size={15} />
             </span>
           </button>
         </div>
@@ -225,7 +231,7 @@ export default function ReportsPage() {
           </div>
           <button className="font-outfit text-xs text-[#1F1F1F]/40 hover:text-[#1F1F1F] transition-colors flex-shrink-0">Export list</button>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto no-scrollbar">
           <table className="w-full">
             <thead>
               <tr className="border-b border-[#1F1F1F]/[0.07]">

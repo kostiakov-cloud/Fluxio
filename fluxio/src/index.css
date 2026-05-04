@@ -76,7 +76,9 @@ body::before {
   0%, 100% { transform: scale(1.02); }
   50%       { transform: scale(1.048); }
 }
-.pulse-pricing { animation: pulse-pricing 2.8s ease-in-out infinite; }
+@media (min-width: 768px) {
+  .pulse-pricing { animation: pulse-pricing 2.8s ease-in-out infinite; }
+}
 
 @keyframes blob1 {
   0%,100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%;transform:translate(0,0) scale(1)}
@@ -132,3 +134,6 @@ body::before {
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#F3F3F3}
 ::-webkit-scrollbar-thumb{background:#1F1F1F;border-radius:2px}
+
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

@@ -187,11 +187,12 @@ export default function AccountsPage() {
           </button>
           <button
             onClick={() => setShowModal(true)}
-            className="btn-magnetic group h-9 px-4 rounded-[8px] bg-[#1F1F1F] text-white font-semibold text-xs flex items-center gap-2 outline-none border-0"
+            title="Add Account"
+            className="btn-magnetic group h-9 w-9 rounded-[8px] bg-[#1F1F1F] text-white flex items-center justify-center outline-none border-0"
           >
             <span className="btn-slide bg-[#CEFB4D]" />
-            <span className="relative z-10 flex items-center gap-1.5 transition-colors duration-300 group-hover:text-[#1F1F1F]">
-              <Plus size={13} />Add Account
+            <span className="relative z-10 flex items-center justify-center transition-colors duration-300 group-hover:text-[#1F1F1F]">
+              <Plus size={16} />
             </span>
           </button>
         </div>
